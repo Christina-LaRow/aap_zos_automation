@@ -1,0 +1,61 @@
+- name: Sample zos_volume_init playbook.
+  hosts: zos_host
+  collections:
+    - "ibm.ibm_zos_core"
+  gather_facts: false
+  environment: '{{ environment_vars }}'
+
+  vars:
+    vol_unit: "{{ volume_unit_address_survey }}"
+    new_volser: "{{ volume_serial_name_survey }}"
+    if_sms: "{{ if_sms_survey | default('false') }}"
+    if_verify_offline:  "{{ if_verify_offline_survey | default('false') }}"
+    #if_verify_volid: "{{ if_verify_volid_survey | default('false') }}" 
+    if_verify_vol_empty: "{{ if_verify_vol_empty_survey | default('false') }}"
+
+  tasks:
+    ############################################################################
+    # Modules zos_volume_init, zos_data_set, zos_copy, zos_job_submit,
+    # zos_job_output.
+    ############################################################################
+    # +-------------------------------------------------------------------------
+    # | Vary target volume offline, initialize volume, and vary target volume
+    # | online.
+    # | Create a data set and member, copy local JCL to data member, submit JCL
+    # | and print results of job output.
+    # +-------------------------------------------------------------------------
+    ############################################################################
+
+    - name: Take volume offline.
+      zos_operator:
+        cmd: 'RO *ALL,V {{ vol_unit }},OFFLINE'
+      register: output
+    
+    - name: Response for varying device offline.
+      debug:
+        var: output
+
+    - name: Initialize target volume - skip verify online check, verify no data
+            sets currently exist on target volume, create an index, volume will
+            not be SMS managed.
+      zos_volume_init:
+        address: "{{ vol_unit }}"
+        verify_offline: "{{ if_verify_offline }}"
+        volid: "{{ new_volser }}"
+        index: true
+        sms_managed: "{{ if_sms }}"
+        verify_volume_empty: "{{ if_verify_vol_empty }}"
+      register: output
+
+    - name: Response for intialize target volume.
+      debug:
+        var: output
+
+    - name: Bring volume back online.
+      zos_operator:
+        cmd: 'RO *ALL,V {{ vol_unit }},ONLINE'
+      register: output
+    
+    - name: Response for varying device offline.
+      debug:
+        var: output
