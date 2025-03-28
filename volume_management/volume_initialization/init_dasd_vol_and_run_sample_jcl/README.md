@@ -1,7 +1,6 @@
 # Initialize z/OS DASD Volumes
 
-This sample playbook demonstrates how to initialize a z/OS DASD volume and
-create, copy over, and submit JCL to a data set on the newly initialized volume
+This sample playbook demonstrates how to initialize a z/OS DASD volume
 using modules included in the Red Hat Ansible Certified Content for IBM Z core 
 collection.
 
@@ -11,10 +10,6 @@ These playbook use:
         ibm.ibm_zos_core
     modules:
         zos_volume_init
-        zos_data_set
-        zos_copy
-        zos_job_submit
-        zos_job_output
 
 It is a good practice to review the playbook contents before executing them.
 It will help you understand the requirements in terms of space, location, names,
