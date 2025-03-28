@@ -33,7 +33,7 @@ This playbook requires:
 ## Run the playbook
 
 ```bash
-ansible-playbook -i inventories init_dasd_vol_and_run_sample_jcl.yml
+ansible-playbook -i inventories init_dasd_vol_only.yml
 ```
 
 # Changelog
