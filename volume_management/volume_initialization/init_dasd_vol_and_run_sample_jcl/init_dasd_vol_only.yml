@@ -26,14 +26,14 @@
     # +-------------------------------------------------------------------------
     ############################################################################
 
-    # - name: Take volume offline.
-    #   zos_operator:
-    #     cmd: 'RO *ALL,V {{ vol_unit }},OFFLINE'
-    #   register: output
+    - name: Take volume offline.
+      zos_operator:
+        cmd: 'RO *ALL,V {{ vol_unit }},OFFLINE'
+      register: output
     
-    # - name: Response for varying device offline.
-    #   debug:
-    #     var: output
+    - name: Response for varying device offline.
+      debug:
+        var: output
 
     - name: Initialize target volume - skip verify online check, verify no data
             sets currently exist on target volume, create an index, volume will
